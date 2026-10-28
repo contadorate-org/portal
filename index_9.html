@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Portal Clientes Contador'ate</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Contador'ate, Asesorías Contables y Financieras en Dosquebradas, Risaralda. Contadores públicos para empresas y personas del Eje Cafetero: declaración de renta, IVA, ICA, exógena, nómina y estados financieros.">
+<meta property="og:title" content="Contador'ate · Asesorías Contables y Financieras">
+<meta property="og:description" content="Contadores públicos en Dosquebradas y Pereira. Renta, impuestos, nómina y estados financieros, con herramientas digitales para su empresa.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_CO">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: banda superior tipo "libro mayor" con buscador de aplicaciones; rejilla de accesos; columna de noticias + columna de datos tributarios */
+:root{
+  --paper:#f3f5f9; --surface:#ffffff; --ink:#15233a; --muted:#59667b; --line:#d8dfea;
+  --brand:#12305c; --brand-ink:#eef3fa; --accent:#b97a12; --accent-soft:#f6ead2;
+  --ok:#2f7a4f; --soon:#8a6a2e;
+  --f-display:"Young Serif", Georgia, "Times New Roman", serif;
+  --f-body:"Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0d1420; --surface:#141e2e; --ink:#e6ecf5; --muted:#9caabf; --line:#26344c;
+  --brand:#0a1a33; --brand-ink:#e6ecf5; --accent:#e0a640; --accent-soft:#3a2d14;
+  --ok:#6cc792; --soon:#d4b06a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0d1420; --surface:#141e2e; --ink:#e6ecf5; --muted:#9caabf; --line:#26344c;
+  --brand:#0a1a33; --brand-ink:#e6ecf5; --accent:#e0a640; --accent-soft:#3a2d14;
+  --ok:#6cc792; --soon:#d4b06a; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+
+/* Encabezado */
+.top{background:var(--brand);color:var(--brand-ink)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.mark{width:52px;height:auto;flex:none}
+.logo b{display:block;font-family:var(--f-display);font-weight:400;font-size:19px;line-height:1.1}
+.logo small{font-size:12px;opacity:.75;letter-spacing:.04em}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav a{text-decoration:none;font-size:14px;font-weight:500;padding:8px 12px;border-radius:6px;opacity:.85}
+nav a:hover{opacity:1;background:rgba(255,255,255,.08)}
+
+/* Hero */
+.hero{background:var(--brand);color:var(--brand-ink);border-bottom:4px double var(--accent)}
+.hero .wrap{padding-block:40px 48px;display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:end}
+.hero h1{font-family:var(--f-display);font-weight:400;font-size:clamp(32px,5vw,52px);line-height:1.08;margin:10px 0 14px;text-wrap:balance}
+.hero p{margin:0;max-width:52ch;opacity:.85}
+.search{display:flex;flex-direction:column;gap:8px}
+.search label{font-size:13px;opacity:.8}
+.search input{width:100%;font:inherit;font-size:17px;padding:14px 16px;border-radius:8px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:var(--brand-ink)}
+.search input::placeholder{color:var(--brand-ink);opacity:.5}
+
+section{padding-block:44px}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.sec-head h2{font-family:var(--f-display);font-weight:400;font-size:30px;margin:4px 0 0;text-wrap:balance}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font:inherit;font-size:13px;font-weight:500;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+
+/* Aplicaciones */
+.apps{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.app{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.app-top{display:flex;justify-content:space-between;align-items:start;gap:10px}
+.ico{width:44px;height:44px;border-radius:8px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}
+.ico svg{width:22px;height:22px}
+.state{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:4px;border:1px solid currentColor}
+.state.ok{color:var(--ok)} .state.soon{color:var(--soon)}
+.app h3{margin:0;font-size:19px;font-weight:600}
+.app .cat{font-size:12px;color:var(--muted);font-family:var(--f-mono)}
+.app p{margin:0;color:var(--muted);font-size:14.5px;flex:1}
+.btn{display:inline-flex;justify-content:center;align-items:center;gap:8px;text-decoration:none;font-weight:600;font-size:14px;padding:10px 14px;border-radius:7px;background:var(--brand);color:var(--brand-ink);border:1px solid var(--brand)}
+.btn:hover{filter:brightness(1.15)}
+.btn[aria-disabled="true"]{background:transparent;color:var(--muted);border-color:var(--line);pointer-events:none}
+.empty{color:var(--muted);padding:24px;border:1px dashed var(--line);border-radius:10px;text-align:center}
+
+/* Noticias + lateral */
+.split{display:grid;grid-template-columns:1fr 340px;gap:36px;align-items:start}
+.news{display:flex;flex-direction:column}
+.item{border-top:1px solid var(--line);padding-block:20px;display:grid;grid-template-columns:96px 1fr;gap:18px}
+.item:last-child{border-bottom:1px solid var(--line)}
+.date{font-family:var(--f-mono);font-size:13px;color:var(--muted);line-height:1.3}
+.date b{display:block;font-size:26px;color:var(--ink);font-weight:500}
+.item .tag{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.item h3{margin:4px 0 6px;font-size:19px;font-weight:600;line-height:1.3;text-wrap:balance}
+.item p{margin:0;color:var(--muted);max-width:65ch}
+.item details{margin-top:8px}
+.item summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--ink)}
+.item details div{margin-top:8px;max-width:65ch}
+
+aside{display:flex;flex-direction:column;gap:16px;min-width:0}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px}
+.box h3{margin:0 0 12px;font-family:var(--f-display);font-weight:400;font-size:20px}
+.ledger{width:100%;border-collapse:collapse;font-size:14px}
+.ledger td{padding:8px 0;border-bottom:1px dashed var(--line)}
+.ledger td:last-child{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.ledger tr:last-child td{border-bottom:0}
+.note{font-size:12.5px;color:var(--muted);margin:10px 0 0}
+.contact p{margin:0 0 6px;font-size:14.5px}
+.copy{font:inherit;font-size:12px;margin-left:6px;padding:2px 8px;border-radius:4px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+
+/* Nosotros / servicios */
+.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;border-top:1px solid var(--line)}
+.svc{padding:18px 18px 18px 0;border-bottom:1px solid var(--line)}
+.svc h4{margin:0 0 4px;font-size:16px}
+.svc p{margin:0;font-size:14px;color:var(--muted)}
+
+.cta .cta-in{background:var(--accent-soft);border:1px solid var(--line);border-radius:12px;padding-block:28px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.cta{padding-top:0}
+.cta h2{font-family:var(--f-display);font-weight:400;font-size:clamp(22px,3vw,28px);margin:4px 0 6px;text-wrap:balance}
+.cta p{margin:0;color:var(--muted);max-width:60ch}
+.btn-wa{background:var(--accent);border-color:var(--accent);color:#1c1405;font-size:15px;padding:12px 18px}
+.social{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.social a{font-size:13px;font-weight:600;text-decoration:none;padding:6px 10px;border:1px solid var(--line);border-radius:6px}
+footer{background:var(--brand);color:var(--brand-ink);font-size:13px}
+footer .wrap{padding-block:26px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;opacity:.85}
+
+@media (max-width:880px){
+  .hero .wrap{grid-template-columns:1fr;gap:24px;padding-block:28px 32px}
+  .split{grid-template-columns:1fr}
+  nav{display:none}
+}
+@media (max-width:480px){.item{grid-template-columns:1fr;gap:6px}.date b{display:inline;font-size:16px;margin-right:6px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#inicio">
+      <img class="mark" alt="Logo Contador'ate" src="data:image/webp;base64,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">
+      <span><b>Contador'ate</b><small>Asesorías Contables y Financieras · Accounting And Tax (A&amp;T)</small></span>
+    </a>
+    <nav aria-label="Secciones">
+      <a href="#aplicaciones">Aplicaciones</a>
+      <a href="#noticias">Noticias</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </div>
+</header>
+
+<main id="inicio">
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">Portal de clientes</span>
+        <h1>Sus herramientas contables, en un solo lugar.</h1>
+        <p>Ingrese a las aplicaciones de facturación, arrendamientos, estados financieros y demás programas que Contador'ate desarrolla para su empresa. Aquí también publicamos noticias tributarias y recordatorios.</p>
+      </div>
+      <div class="search">
+        <label for="q">Buscar aplicación</label>
+        <input id="q" type="search" placeholder="Ej.: facturación, arriendos…" autocomplete="off">
+      </div>
+    </div>
+  </div>
+
+  <section id="aplicaciones">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><span class="eyebrow">Accesos</span><h2>Aplicaciones</h2></div>
+        <div class="chips" id="appFilters" role="group" aria-label="Filtrar por categoría"></div>
+      </div>
+      <div class="apps" id="apps"></div>
+    </div>
+  </section>
+
+  <section id="noticias" style="padding-top:0">
+    <div class="wrap split">
+      <div>
+        <div class="sec-head">
+          <div><span class="eyebrow">Actualidad</span><h2>Noticias y temas de interés</h2></div>
+          <div class="chips" id="newsFilters" role="group" aria-label="Filtrar noticias"></div>
+        </div>
+        <div class="news" id="news"></div>
+      </div>
+      <aside>
+        <div class="box">
+          <h3>Valores de referencia 2026</h3>
+          <table class="ledger" id="refs"></table>
+          <p class="note">Verifique siempre con su contador antes de aplicar estos valores.</p>
+        </div>
+        <div class="box contact" id="contacto">
+          <h3>Contacto</h3>
+          <p><strong>Oficina:</strong> Calle 10 n.º 1-102, Mz 4 Casa 4A, Conjunto Sakabuma · Dosquebradas, Risaralda</p>
+          <p><strong>WhatsApp:</strong> <span class="mono" id="tel">322 568 7714</span><button class="copy" data-copy="tel">Copiar</button></p>
+          <p><strong>Correo:</strong> <span class="mono" id="mail">contadorate@gmail.com</span><button class="copy" data-copy="mail">Copiar</button></p>
+          <p class="note">Horario: lunes a viernes, 8:00 a. m. – 5:00 p. m.</p>
+          <div class="social" id="social"></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="cta" aria-labelledby="cta-t">
+    <div class="wrap cta-in">
+      <div>
+        <span class="eyebrow">¿Aún no es cliente?</span>
+        <h2 id="cta-t">Su contabilidad al día, sin sorpresas con la DIAN.</h2>
+        <p>Cuéntenos qué necesita su empresa o su declaración de renta. La primera revisión es sin costo.</p>
+      </div>
+      <a class="btn btn-wa" href="https://wa.me/573225687714?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20sus%20servicios%20contables" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+    </div>
+  </section>
+
+  <section id="servicios" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><div><span class="eyebrow">La firma</span><h2>Servicios</h2></div></div>
+      <div class="services">
+        <div class="svc"><h4>Impuestos DIAN</h4><p>Renta, IVA, retención en la fuente e información exógena.</p></div>
+        <div class="svc"><h4>Impuestos municipales</h4><p>ICA, reteICA y exógena municipal en el Eje Cafetero.</p></div>
+        <div class="svc"><h4>Nómina y laboral</h4><p>Liquidación de nómina, prestaciones y documentación bajo el CST.</p></div>
+        <div class="svc"><h4>Estados financieros</h4><p>Preparación bajo NIIF para Pymes, con notas y comparativos.</p></div>
+        <div class="svc"><h4>Desarrollo a la medida</h4><p>Aplicaciones web y libros de Excel para la operación de su empresa.</p></div>
+      </div>
+      <p class="note" style="margin-top:16px">Contadores públicos: Jhon Eduard Quintero Arango, T.P. 130.967-T · Yamile Andrea Martínez Mejía, T.P. 176.572-T · Beatriz Elena Galeano Daza, T.P. 114.522-T</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="yr">2026</span> Contador'ate · Accounting And Tax (A&amp;T)</span>
+    <span>El acceso a cada aplicación requiere el usuario y la clave asignados por la firma. · <a href="admin.html">Administración</a></span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+/* ============================================================
+   CONFIGURACIÓN — edite solo estas listas para actualizar el portal
+   ============================================================ */
+
+// Aplicaciones. Deje url:"" para mostrarla como "Próximamente".
+let APPS = [
+  { name:"FacturaPro", cat:"Facturación", icon:"invoice",
+    desc:"Facturas, cartera, recibos de caja, tesorería e informes por centro de costo.",
+    url:"https://contadorate-org.github.io/facturapro/" },
+  { name:"RentaControl", cat:"Arrendamientos", icon:"home",
+    desc:"Control de inmuebles en arriendo y Airbnb: reservas, ocupación, ingresos y gastos.",
+    url:"https://contadorate-org.github.io/rentacontrol2026/" },
+  { name:"EF Manager", cat:"Financiero", icon:"chart",
+    desc:"Consulte sus estados financieros con comparativos por periodo.",
+    url:"https://efmanager.vercel.app/" },
+  { name:"Costeo de Importaciones", cat:"Comercio exterior", icon:"ship",
+    desc:"Costeo por importación: gastos, anticipos y diferencia en cambio.",
+    url:"https://contadorate-org.github.io/costeo-importaciones/" },
+  { name:"Agenda Contador'ate", cat:"Gestión", icon:"calendar",
+    desc:"Tareas, reuniones y recordatorios con notificaciones en el celular.",
+    url:"" }
+];
+
+// Noticias (la más reciente primero). "detalle" es opcional.
+let NEWS = [
+  { fecha:"2026-10-28", cat:"Tributario",
+    titulo:"Cierre del calendario de renta de personas naturales 2025",
+    resumen:"Terminaron los vencimientos de la declaración de renta de personas naturales. Si quedó pendiente, contáctenos para evaluar la presentación extemporánea y la sanción aplicable.",
+    detalle:"La declaración presentada fuera de plazo genera sanción por extemporaneidad (art. 641 E.T.) e intereses moratorios si hay saldo a pagar. Mientras más pronto se presente, menor es la sanción." },
+  { fecha:"2026-10-20", cat:"Exógena",
+    titulo:"Prepare desde ahora la información exógena del año gravable 2026",
+    resumen:"Revise que sus terceros tengan NIT, dirección y municipio completos en su software contable. Esto evita reprocesos en el reporte del próximo año." },
+  { fecha:"2026-10-10", cat:"Laboral",
+    titulo:"Reducción de la jornada laboral: lo que cambia en su nómina",
+    resumen:"La Ley 2101 de 2021 continúa la reducción gradual de la jornada máxima semanal. Le ayudamos a revisar turnos, horas extra y recargos.",
+    detalle:"Revise los contratos y el reglamento interno de trabajo para ajustar la jornada a la fecha de cada etapa de la reducción." },
+  { fecha:"2026-10-01", cat:"La firma",
+    titulo:"Nuevo portal de clientes Contador'ate",
+    resumen:"Desde esta página puede entrar a todas las aplicaciones que usamos con su empresa. Guarde el enlace en sus favoritos o en la pantalla de inicio de su celular." }
+];
+
+// Valores de referencia del panel lateral.
+const REFS = [
+  ["UVT 2026", "$52.374"],
+  ["Salario mínimo 2026", "Consultar"],
+  ["Auxilio de transporte 2026", "Consultar"]
+];
+
+// Redes sociales. Pegue el enlace de cada perfil; las que queden vacías no se muestran.
+let REDES = [
+  ["WhatsApp", "https://wa.me/573225687714"],
+  ["Facebook", ""],
+  ["Instagram", ""],
+  ["TikTok", ""],
+  ["LinkedIn", ""]
+];
+
+/* ============================================================ */
+const ICONS = {
+  invoice:'<path d="M6 3h9l3 3v15l-3-2-3 2-3-2-3 2V3z"/><path d="M9 9h6M9 13h6"/>',
+  home:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/>',
+  chart:'<path d="M4 20V4"/><path d="M4 20h16"/><path d="M8 16v-4M12 16V8M16 16v-6"/>',
+  ship:'<path d="M3 17l2 3h14l2-3"/><path d="M5 17V9h14v8"/><path d="M9 9V5h6v4"/>',
+  calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  app:'<rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/>'
+};
+const MESES=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const norm=s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+
+let appCat="Todas", newsCat="Todas";
+
+function chips(el, cats, current, onPick){
+  el.innerHTML=["Todas",...cats].map(c=>`<button class="chip" aria-pressed="${c===current}">${esc(c)}</button>`).join("");
+  el.querySelectorAll(".chip").forEach((b,i)=>b.onclick=()=>onPick(i?cats[i-1]:"Todas"));
+}
+
+function renderApps(){
+  const q=norm(document.getElementById("q").value.trim());
+  const list=APPS.filter(a=>(appCat==="Todas"||a.cat===appCat)&&(!q||norm(a.name+" "+a.cat+" "+a.desc).includes(q)));
+  chips(document.getElementById("appFilters"),[...new Set(APPS.map(a=>a.cat))],appCat,c=>{appCat=c;renderApps()});
+  document.getElementById("apps").innerHTML=list.length?list.map(a=>{
+    const live=!!a.url;
+    return `<article class="app">
+      <div class="app-top">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICONS[a.icon]||ICONS.app}</svg></span>
+        <span class="state ${live?"ok":"soon"}">${live?"Disponible":"Próximamente"}</span>
+      </div>
+      <div><h3>${esc(a.name)}</h3><span class="cat">${esc(a.cat)}</span></div>
+      <p>${esc(a.desc)}</p>
+      <a class="btn" ${live?`href="${esc(a.url)}" target="_blank" rel="noopener"`:'aria-disabled="true"'}>${live?"Ingresar →":"En preparación"}</a>
+    </article>`}).join(""):`<div class="empty">No hay aplicaciones que coincidan con la búsqueda.</div>`;
+}
+
+function renderNews(){
+  const cats=[...new Set(NEWS.map(n=>n.cat))];
+  chips(document.getElementById("newsFilters"),cats,newsCat,c=>{newsCat=c;renderNews()});
+  const list=NEWS.filter(n=>newsCat==="Todas"||n.cat===newsCat).sort((a,b)=>b.fecha.localeCompare(a.fecha));
+  document.getElementById("news").innerHTML=list.map(n=>{
+    const [y,m,d]=n.fecha.split("-");
+    return `<article class="item">
+      <div class="date"><b>${d}</b>${MESES[+m-1]} ${y}</div>
+      <div><span class="tag">${esc(n.cat)}</span><h3>${esc(n.titulo)}</h3><p>${esc(n.resumen)}</p>
+      ${n.detalle?`<details><summary>Leer más</summary><div>${esc(n.detalle)}</div></details>`:""}</div>
+    </article>`}).join("");
+}
+
+document.getElementById("refs").innerHTML=REFS.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join("");
+document.getElementById("yr").textContent=new Date().getFullYear();
+document.getElementById("q").addEventListener("input",renderApps);
+document.querySelectorAll("[data-copy]").forEach(b=>b.onclick=()=>{
+  const el=document.getElementById(b.dataset.copy),t=el.textContent;
+  const done=()=>{b.textContent="Copiado";setTimeout(()=>b.textContent="Copiar",1500)};
+  try{navigator.clipboard.writeText(t).then(done,()=>{getSelection().selectAllChildren(el)})}catch(e){getSelection().selectAllChildren(el)}
+});
+function renderRedes(){
+  document.getElementById("social").innerHTML=REDES.filter(r=>r[1]).map(r=>`<a href="${esc(r[1])}" target="_blank" rel="noopener">${esc(r[0])}</a>`).join("");
+}
+
+// Contenido en línea: noticias, apps y redes se administran desde admin.html (Supabase).
+// Si la conexión falla, la página muestra las listas de arriba como respaldo.
+const SB_URL="https://rddqovxastacbvhhwggv.supabase.co";
+const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkZHFvdnhhc3RhY2J2aGh3Z2d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNjQwNTgsImV4cCI6MjA5NTY0MDA1OH0.eA8WpfrGn3en4NZ-IG3j8XSynvujrExD6Bv1Lmp1fCs";
+async function cargarEnLinea(){
+  try{
+    if(!window.supabase) return;
+    const sb=window.supabase.createClient(SB_URL,SB_KEY);
+    const [n,a,r]=await Promise.all([
+      sb.from("portal_noticias").select("fecha,categoria,titulo,resumen,detalle").order("fecha",{ascending:false}).limit(30),
+      sb.from("portal_apps").select("nombre,categoria,descripcion,url,icono,orden").order("orden"),
+      sb.from("portal_redes").select("red,url,orden").order("orden")
+    ]);
+    if(!n.error&&n.data&&n.data.length){NEWS=n.data.map(x=>({fecha:x.fecha,cat:x.categoria,titulo:x.titulo,resumen:x.resumen,detalle:x.detalle}));renderNews();}
+    if(!a.error&&a.data&&a.data.length){APPS=a.data.map(x=>({name:x.nombre,cat:x.categoria,desc:x.descripcion,url:x.url||"",icon:x.icono}));renderApps();}
+    if(!r.error&&r.data&&r.data.length){REDES=r.data.map(x=>[x.red,x.url]);renderRedes();}
+  }catch(e){/* sin conexión: se quedan las listas de respaldo */}
+}
+renderApps(); renderNews(); renderRedes(); cargarEnLinea();
+</script>
