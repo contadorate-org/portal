@@ -120,6 +120,16 @@ aside{display:flex;flex-direction:column;gap:16px;min-width:0}
 .btn-wa{background:var(--accent);border-color:var(--accent);color:#1c1405;font-size:15px;padding:12px 18px}
 .social{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .social a{font-size:13px;font-weight:600;text-decoration:none;padding:6px 10px;border:1px solid var(--line);border-radius:6px}
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.smm{width:100%;border-collapse:collapse;font-size:15px;min-width:560px}
+.smm th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:right;padding:12px 16px;border-bottom:1px solid var(--line)}
+.smm th:first-child,.smm td:first-child{text-align:left}
+.smm td{padding:11px 16px;border-bottom:1px dashed var(--line);text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:14px}
+.smm tr:last-child td{border-bottom:0}
+.smm td:first-child{font-family:var(--f-body);font-weight:600;font-size:15px}
+.smm tr.now td{background:var(--accent-soft)}
+.smm .up{color:var(--muted)}
+.smm .up.hi{color:var(--accent);font-weight:600}
 footer{background:var(--brand);color:var(--brand-ink);font-size:13px}
 footer .wrap{padding-block:26px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;opacity:.85}
 
@@ -141,6 +151,7 @@ footer .wrap{padding-block:26px;display:flex;justify-content:space-between;gap:1
     <nav aria-label="Secciones">
       <a href="#aplicaciones">Aplicaciones</a>
       <a href="#noticias">Noticias</a>
+      <a href="#salario-minimo">Salario mínimo</a>
       <a href="#servicios">Servicios</a>
       <a href="#contacto">Contacto</a>
     </nav>
@@ -196,6 +207,19 @@ footer .wrap{padding-block:26px;display:flex;justify-content:space-between;gap:1
           <div class="social" id="social"></div>
         </div>
       </aside>
+    </div>
+  </section>
+
+  <section id="salario-minimo" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><div><span class="eyebrow">Laboral</span><h2>Salario mínimo y auxilio de transporte</h2></div><span class="note" style="margin:0">Valores mensuales en pesos colombianos · últimos 10 años</span></div>
+      <div class="tbl-wrap">
+        <table class="smm">
+          <thead><tr><th scope="col">Año</th><th scope="col">Salario mínimo</th><th scope="col">Incremento</th><th scope="col">Auxilio de transporte</th><th scope="col">Total con auxilio</th></tr></thead>
+          <tbody id="smmBody"></tbody>
+        </table>
+      </div>
+      <p class="note" style="max-width:75ch">El auxilio de transporte se paga a quienes devengan hasta dos salarios mínimos. El salario de 2026 lo fijó el Decreto 1469 de 2025; el Consejo de Estado lo suspendió en febrero de 2026 y en julio revocó esa suspensión, sin cambio en el valor.</p>
     </div>
   </section>
 
@@ -278,13 +302,28 @@ let NEWS = [
 // Valores de referencia del panel lateral.
 const REFS = [
   ["UVT 2026", "$52.374"],
-  ["Salario mínimo 2026", "1.750.905"],
-  ["Auxilio de transporte 2026", "249.095"]
+  ["Salario mínimo 2026", "$1.750.905"],
+  ["Auxilio de transporte 2026", "$249.095"]
+];
+
+// Salario mínimo histórico: [año, salario mínimo, auxilio de transporte]. Agregue cada año nuevo al final.
+const SMMLV = [
+  [2016, 689455, 77700],
+  [2017, 737717, 83140],
+  [2018, 781242, 88211],
+  [2019, 828116, 97032],
+  [2020, 877803, 102854],
+  [2021, 908526, 106454],
+  [2022, 1000000, 117172],
+  [2023, 1160000, 140606],
+  [2024, 1300000, 162000],
+  [2025, 1423500, 200000],
+  [2026, 1750905, 249095]
 ];
 
 // Redes sociales. Pegue el enlace de cada perfil; las que queden vacías no se muestran.
 let REDES = [
-  ["WhatsApp", "https://wa.me/573122138734"],
+  ["WhatsApp", "https://wa.me/573225687714"],
   ["Facebook", ""],
   ["Instagram", ""],
   ["TikTok", ""],
@@ -341,6 +380,13 @@ function renderNews(){
     </article>`}).join("");
 }
 
+function renderSalario(){
+  const pesos=n=>"$"+n.toLocaleString("es-CO");
+  const filas=SMMLV.map((r,i)=>({a:r[0],s:r[1],t:r[2],inc:i?(r[1]/SMMLV[i-1][1]-1)*100:null})).filter(r=>r.inc!==null).slice(-10).reverse();
+  const top=Math.max(...filas.map(r=>r.inc));
+  document.getElementById("smmBody").innerHTML=filas.map((r,i)=>`<tr${i===0?' class="now"':""}><td>${r.a}</td><td>${pesos(r.s)}</td><td class="up${r.inc===top?" hi":""}">+${r.inc.toFixed(1).replace(".",",")} %</td><td>${pesos(r.t)}</td><td>${pesos(r.s+r.t)}</td></tr>`).join("");
+}
+renderSalario();
 document.getElementById("refs").innerHTML=REFS.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join("");
 document.getElementById("yr").textContent=new Date().getFullYear();
 document.getElementById("q").addEventListener("input",renderApps);
